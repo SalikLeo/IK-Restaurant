@@ -1,0 +1,44 @@
+{
+  "name": "khyber-charsi-tikka-karahi-restaurant",
+  "version": "1.0.0",
+  "description": "Khyber Charsi Tikka Karahi & Restaurant Management System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --windows"
+  },
+  "build": {
+    "appId": "com.khybercharsitikkakarahirestaurant.system",
+    "productName": "Khyber Charsi Tikka Karahi & Restaurant",
+    "icon": "assets/logo.jpg",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/logo.jpg",
+      "forceCodeSigning": false,
+      "verifyUpdateCodeSignature": false,
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "allowElevation": true
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "keywords": [
+    "restaurant",
+    "management",
+    "electron"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  }
+}
