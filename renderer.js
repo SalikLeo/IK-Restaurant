@@ -15445,3 +15445,122 @@ window.printStockReport = () => {
         }, 500);
     };
 };
+
+// --- DUMMY DATA INJECTION ---
+(function injectDummyData() {
+    if (localStorage.getItem('dummyDataV1') === 'true') return;
+
+    const StorageLocal = {
+        get: (key) => {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        },
+        set: (key, value) => localStorage.setItem(key, JSON.stringify(value))
+    };
+
+    // 1. Employees
+    const employees = StorageLocal.get('employees');
+    if (employees.length === 0) {
+        employees.push({
+            id: 'emp_' + Date.now(),
+            name: 'Ali Ahmed',
+            phone: '0300-1234567',
+            salary: 45000,
+            role: 'Chef',
+            joinDate: '2025-01-10'
+        });
+        employees.push({
+            id: 'emp_' + (Date.now() + 1),
+            name: 'Usman Khan',
+            phone: '0300-7654321',
+            salary: 30000,
+            role: 'Waiter',
+            joinDate: '2025-02-15'
+        });
+        StorageLocal.set('employees', employees);
+    }
+
+    // 2. Waiters
+    const waiters = StorageLocal.get('waiters');
+    if (waiters.length === 0) {
+        waiters.push({ id: 'w_1', name: 'Usman Khan', active: true });
+        waiters.push({ id: 'w_2', name: 'Zain Ali', active: true });
+        waiters.push({ id: 'w_3', name: 'Farhan', active: true });
+        StorageLocal.set('waiters', waiters);
+    }
+
+    // 3. Expenses
+    const expenses = StorageLocal.get('expenses');
+    if (expenses.length === 0) {
+        const today = new Date().toISOString().split('T')[0];
+        expenses.push({ id: 'exp_' + Date.now(), category: 'Kitchen', amount: 5000, date: today, description: 'Vegetables and Meat' });
+        expenses.push({ id: 'exp_' + (Date.now()+1), category: 'Utility Bill', amount: 12000, date: today, description: 'Electricity Bill' });
+        expenses.push({ id: 'exp_' + (Date.now()+2), category: 'Maintenance', amount: 2500, date: today, description: 'Plumbing repair' });
+        StorageLocal.set('expenses', expenses);
+    }
+
+    // 4. Stocks
+    const stocks = StorageLocal.get('stocks');
+    if (stocks.length === 0) {
+        const today = new Date().toISOString().split('T')[0];
+        stocks.push({ id: 'stk_' + Date.now(), itemName: 'Chicken', quantity: 50, price: 650, supplierName: 'Asif Poultry', date: today, paymentStatus: 'paid', unit: 'kg' });
+        stocks.push({ id: 'stk_' + (Date.now()+1), itemName: 'Cooking Oil', quantity: 15, price: 450, supplierName: 'Metro', date: today, paymentStatus: 'unpaid', unit: 'liters' });
+        stocks.push({ id: 'stk_' + (Date.now()+2), itemName: 'Flour', quantity: 100, price: 120, supplierName: 'Ali Traders', date: today, paymentStatus: 'paid', unit: 'kg' });
+        StorageLocal.set('stocks', stocks);
+    }
+
+    // 5. Sales
+    const sales = StorageLocal.get('sales');
+    if (sales.length === 0) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        const dummySale1 = {
+            id: 'ORD-' + Date.now(),
+            date: todayStr,
+            time: timeStr,
+            customerName: 'Ahmad',
+            location: 'Dine-In',
+            waiter: 'Usman Khan',
+            paymentMethod: 'Cash',
+            items: [
+                { id: 'item_1', name: 'Chicken Half Karahi', price: 800, quantity: 2, total: 1600 }
+            ],
+            subtotal: 1600,
+            discount: { type: 'fixed', value: 0, amount: 0 },
+            total: 1600
+        };
+
+        const dummySale2 = {
+            id: 'ORD-' + (Date.now() + 1),
+            date: todayStr,
+            time: timeStr,
+            customerName: 'Customer 2',
+            location: 'Takeaway',
+            waiter: '',
+            paymentMethod: 'Card',
+            items: [
+                { id: 'item_2', name: 'Beef Full Karahi', price: 1700, quantity: 1, total: 1700 },
+                { id: 'item_3', name: 'Roti', price: 20, quantity: 5, total: 100 }
+            ],
+            subtotal: 1800,
+            discount: { type: 'percentage', value: 10, amount: 180 },
+            total: 1620
+        };
+
+        sales.push(dummySale1, dummySale2);
+        StorageLocal.set('sales', sales);
+    }
+
+    localStorage.setItem('dummyDataV1', 'true');
+    console.log('Dummy data injected successfully!');
+    
+    // Automatically reload the window once so that the UI can pick up the dummy data
+    setTimeout(() => {
+        if (!sessionStorage.getItem('dummyReloaded')) {
+            sessionStorage.setItem('dummyReloaded', 'true');
+            window.location.reload();
+        }
+    }, 500);
+})();

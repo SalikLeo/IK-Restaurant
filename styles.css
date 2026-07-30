@@ -1015,7 +1015,7 @@ button[onclick="openAddExpenseModal()"]:hover {
 
 .menu-items-container {
     flex: 1;
-    overflow-y: hidden;
+    overflow-y: auto;
     overflow-x: hidden;
     padding: 12px;
     background: #ffffff;
@@ -1025,7 +1025,7 @@ button[onclick="openAddExpenseModal()"]:hover {
 
 .menu-items-grid {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 4px;
     width: 100%;
     contain: layout style paint;
@@ -1033,37 +1033,6 @@ button[onclick="openAddExpenseModal()"]:hover {
 
 .menu-items-grid.edit-mode {
     gap: 4px;
-}
-
-/* Responsive: reduce columns as window gets smaller (avoid horizontal scrollbar) */
-@media (max-width: 1700px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 1450px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 1200px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 950px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 700px) {
-    .menu-items-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
 }
 
 .menu-item-card {
@@ -1876,9 +1845,12 @@ button[onclick="openAddExpenseModal()"]:hover {
         font-size: 16px !important;
         width: 18px !important;
     }
-    
     .main-content {
         padding: 12px !important;
+    }
+    
+    .main-content.has-order-section {
+        padding-right: 442px !important;
     }
     
     .pos-top-bar {
