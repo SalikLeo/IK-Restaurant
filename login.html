@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khyber Charsi Tikka Karahi & Restaurant - Login</title>
+    <title>ABC Restaurant - Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
             margin: 0;
@@ -137,9 +138,9 @@
     <div class="login-container">
         <div class="login-logo">
             <img src="assets/logo.jpg" alt="Restaurant Logo"
-                onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'color: white; font-size: 24px;\'>KCTKR</div>';">
+                onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'color: white; font-size: 24px;\'>ABC</div>';">
         </div>
-        <h1 class="login-title">Khyber Charsi Tikka Karahi & Restaurant</h1>
+        <h1 class="login-title">ABC Restaurant</h1>
         <p class="login-subtitle">Enter password to continue</p>
         <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
             <div class="input-group" style="position: relative;">
@@ -159,10 +160,6 @@
     </div>
 
     <script>
-        // Temporary password reset code
-        localStorage.setItem('loginPassword', '');
-        localStorage.setItem('adminPassword', '');
-
         // Storage utility
         const Storage = {
             get: (key) => {

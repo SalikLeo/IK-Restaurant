@@ -22,7 +22,7 @@ body {
 
 /* Sidebar Styles */
 .sidebar {
-    width: 235px;
+    width: 200px;
     background: #162b47;
     color: white;
     display: flex;
@@ -33,16 +33,16 @@ body {
 
 /* Logo Section */
 .sidebar-logo {
-    padding: 30px 20px;
+    padding: 15px 12px;
     background: transparent;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo-circle {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 18px;
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 10px;
     border-radius: 50%;
     background: #000000;
     display: flex;
@@ -88,10 +88,10 @@ body {
 }
 
 .logo-restaurant-name {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     letter-spacing: 0.3px;
     text-transform: none;
 }
@@ -220,23 +220,23 @@ html[dir="rtl"] .main-content {
 }
 
 .nav-item {
-    width: calc(100% - 32px);
-    padding: 6px 16px;
-    margin: 1px 16px;
+    width: calc(100% - 20px);
+    padding: 5px 12px;
+    margin: 1px 10px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.8);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 500;
     text-align: left;
-    border-radius: 12px;
+    border-radius: 8px;
     position: relative;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.1px;
 }
 
@@ -251,9 +251,9 @@ html[dir="rtl"] .main-content {
     background: #4a90e2;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     font-weight: 600;
-    font-size: 17px;
+    font-size: 15px;
 }
 
 .nav-item.active::before {
@@ -261,8 +261,8 @@ html[dir="rtl"] .main-content {
 }
 
 .nav-icon {
-    font-size: 21px;
-    width: 24px;
+    font-size: 18px;
+    width: 22px;
     text-align: center;
     display: flex;
     align-items: center;
@@ -470,18 +470,19 @@ thead {
 }
 
 th {
-    padding: 10px 12px;
+    padding: 5px 8px !important;
     text-align: left;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 td {
-    padding: 10px 12px;
+    padding: 5px 8px !important;
     border-bottom: 1px solid #e0e0e0;
     color: #333;
+    font-size: 12px !important;
 }
 
 tbody tr:hover {
@@ -1841,4 +1842,94 @@ button[onclick="openAddExpenseModal()"]:hover {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 15px;
     }
+}
+
+/* Global Compact UI Overrides for Smaller Screens */
+@media screen and (max-width: 1366px), screen and (max-height: 768px) {
+    body {
+        font-size: 13px !important;
+    }
+    
+    .sidebar {
+        width: 180px !important;
+    }
+    
+    .logo-circle {
+        width: 55px !important;
+        height: 55px !important;
+    }
+    
+    .logo-restaurant-name {
+        font-size: 12px !important;
+    }
+    
+    .nav-item {
+        width: calc(100% - 16px) !important;
+        margin: 1px 8px !important;
+        padding: 4px 10px !important;
+        font-size: 14px !important;
+        gap: 6px !important;
+        border-radius: 6px !important;
+    }
+    
+    .nav-icon {
+        font-size: 16px !important;
+        width: 18px !important;
+    }
+    
+    .main-content {
+        padding: 12px !important;
+    }
+    
+    .pos-top-bar {
+        padding: 6px 15px !important;
+    }
+    
+    .restaurant-heading {
+        font-size: 15px !important;
+    }
+    
+    .menu-title {
+        font-size: 15px !important;
+    }
+    
+    /* Tighter Tables */
+    table th, table td {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+    
+    /* Tighter buttons */
+    button:not(.lang-btn):not(.nav-item) {
+        padding: 4px 10px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Custom controls spacing */
+    select, input[type="text"], input[type="number"], input[type="date"] {
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+        height: auto !important;
+    }
+}
+
+/* Premium Table Column Separators */
+th:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+td:not(:last-child) {
+    border-right: 1px solid #e0e0e0 !important;
+}
+
+/* Tighter borders for compact tables */
+table {
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Main Tab Heading Font Size Enhancements */
+.tab-content h2 {
+    font-size: 28px !important;
+    color: #1e3a5f !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
 }

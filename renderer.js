@@ -795,29 +795,32 @@ function formatDate(date) {
 function formatReceiptItems(items) {
     if (!items || items.length === 0) return '';
 
-    // Return HTML table format with left-aligned columns
-    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 10px; font-family: Arial, sans-serif;">';
+    // Return HTML table format with grid borders and proper text alignment
+    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 10px; font-family: Arial, sans-serif; border: 1px solid #000;">';
     result += '<thead>';
-    result += '<tr style="border-bottom: 1px dashed #000;">';
-    result += '<th style="text-align: left; padding: 4px 8px; font-weight: 700;">Item</th>';
-    result += '<th style="text-align: right; padding: 4px 8px; font-weight: 700;">Qty</th>';
-    result += '<th style="text-align: left; padding: 4px 8px; font-weight: 700;">Price</th>';
-    result += '<th style="text-align: left; padding: 4px 8px; font-weight: 700;">Total</th>';
+    result += '<tr style="border-bottom: 1px solid #000; background-color: #f2f2f2;">';
+    result += '<th style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 45%;">Item</th>';
+    result += '<th style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 15%;">Qty</th>';
+    result += '<th style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 20%;">Price</th>';
+    result += '<th style="text-align: right; padding: 4px 6px; font-weight: bold; width: 20%;">Total</th>';
     result += '</tr>';
     result += '</thead>';
     result += '<tbody>';
 
-    items.forEach(item => {
+    items.forEach((item, index) => {
         const name = item.name || 'Unknown';
         const quantity = formatQuantity(item.quantity || 0);
         const unitPrice = item.price || 0;
         const totalPrice = unitPrice * (item.quantity || 0);
+        
+        // Add a bottom border to every row except the last one to make it clean
+        const rowStyle = index === items.length - 1 ? '' : 'border-bottom: 1px solid #000;';
 
-        result += '<tr>';
-        result += `<td style="text-align: left; padding: 3px 8px; font-weight: 700;">${name}</td>`;
-        result += `<td style="text-align: right; padding: 3px 8px; font-weight: 700;">${quantity}</td>`;
-        result += `<td style="text-align: left; padding: 3px 8px; font-weight: 700;">${formatNumber(unitPrice)}</td>`;
-        result += `<td style="text-align: left; padding: 3px 8px; font-weight: 700;">${formatNumber(totalPrice)}</td>`;
+        result += `<tr style="${rowStyle}">`;
+        result += `<td style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${name}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${quantity}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${formatNumber(unitPrice)}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold;">${formatNumber(totalPrice)}</td>`;
         result += '</tr>';
     });
 
@@ -829,44 +832,54 @@ function formatReceiptItems(items) {
 
 // Helper function to format receipt summary as HTML table
 function formatReceiptSummary(subtotal, discountAmount, tax, serviceCharges, total) {
-    let result = '<table style="width: 100%; border-collapse: collapse; margin: 3px 0; font-size: 11px; font-family: Arial, sans-serif; font-weight: bold;">';
+    const rows = [];
+    
+    rows.push({
+        label: t('Subtotal'),
+        value: `Rs.${formatNumber(subtotal)}`
+    });
+
+    if (discountAmount > 0) {
+        rows.push({
+            label: t('Discount'),
+            value: `-Rs.${formatNumber(discountAmount)}`
+        });
+    }
+
+    if (tax > 0) {
+        rows.push({
+            label: 'GST (5%)',
+            value: `Rs.${formatNumber(tax)}`
+        });
+    }
+
+    if (serviceCharges > 0) {
+        rows.push({
+            label: 'Service Charges (10%)',
+            value: `Rs.${formatNumber(serviceCharges)}`
+        });
+    }
+
+    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 10px; font-family: Arial, sans-serif; border: 1px solid #000;">';
     result += '<thead>';
-    result += '<tr style="border-bottom: 2px solid #000;">';
-    result += '<th style="text-align: left; padding: 2px 4px;">Description</th>';
-    result += '<th style="text-align: right; padding: 2px 4px;">Amount</th>';
+    result += '<tr style="border-bottom: 1px solid #000; background-color: #f2f2f2;">';
+    result += '<th style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 65%;">Description</th>';
+    result += '<th style="text-align: right; padding: 4px 6px; font-weight: bold; width: 35%;">Amount</th>';
     result += '</tr>';
     result += '</thead>';
     result += '<tbody>';
 
-    result += '<tr>';
-    result += `<td style="text-align: left; padding: 2px 4px;">${t('Subtotal')}</td>`;
-    result += `<td style="text-align: right; padding: 2px 4px;">Rs.${formatNumber(subtotal)}</td>`;
-    result += '</tr>';
-
-    if (discountAmount > 0) {
-        result += '<tr>';
-        result += `<td style="text-align: left; padding: 2px 4px;">${t('Discount')}</td>`;
-        result += `<td style="text-align: right; padding: 2px 4px;">-Rs.${formatNumber(discountAmount)}</td>`;
+    rows.forEach(row => {
+        result += '<tr style="border-bottom: 1px solid #000;">';
+        result += `<td style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${row.label}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold;">${row.value}</td>`;
         result += '</tr>';
-    }
+    });
 
-    if (tax > 0) {
-        result += '<tr>';
-        result += `<td style="text-align: left; padding: 2px 4px;">GST (5%)</td>`;
-        result += `<td style="text-align: right; padding: 2px 4px;">Rs.${formatNumber(tax)}</td>`;
-        result += '</tr>';
-    }
-
-    if (serviceCharges > 0) {
-        result += '<tr>';
-        result += `<td style="text-align: left; padding: 2px 4px;">Service Charges (10%)</td>`;
-        result += `<td style="text-align: right; padding: 2px 4px;">Rs.${formatNumber(serviceCharges)}</td>`;
-        result += '</tr>';
-    }
-
-    result += '<tr style="border-top: 1px dashed #000; font-size: 13px;">';
-    result += `<td style="text-align: left; padding: 3px 4px; font-weight: 900;">Grand Total</td>`;
-    result += `<td style="text-align: right; padding: 3px 4px; font-weight: 900;">Rs.${formatNumber(total)}</td>`;
+    // Grand Total row
+    result += '<tr style="background-color: #f2f2f2; font-size: 12px;">';
+    result += `<td style="text-align: left; padding: 5px 6px; font-weight: 900; border-right: 1px solid #000;">Grand Total</td>`;
+    result += `<td style="text-align: right; padding: 5px 6px; font-weight: 900;">Rs.${formatNumber(total)}</td>`;
     result += '</tr>';
 
     result += '</tbody>';
@@ -878,23 +891,25 @@ function formatReceiptSummary(subtotal, discountAmount, tax, serviceCharges, tot
 function formatKOTItems(items) {
     if (!items || items.length === 0) return '';
 
-    // Return HTML table format with 2 columns (Item, Qty) for KOT
-    let result = '<table style="width: 100%; border-collapse: collapse; margin: 2px 0; font-size: 12px; font-family: Arial, sans-serif; display: table;">';
+    // Return HTML table format with grid borders and proper text alignment
+    let result = '<table style="width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; font-family: Arial, sans-serif; display: table; border: 1px solid #000;">';
     result += '<thead>';
-    result += '<tr style="border-bottom: 1px dashed #000;">';
-    result += '<th style="text-align: left; padding: 2px 8px; font-weight: 700; font-size: 12px; width: 70%;">Item</th>';
-    result += '<th style="text-align: right; padding: 2px 8px; font-weight: 700; font-size: 12px; width: 30%;">Qty</th>';
+    result += '<tr style="border-bottom: 1px solid #000; background-color: #f2f2f2;">';
+    result += '<th style="text-align: left; padding: 4px 6px; font-weight: bold; font-size: 12px; border-right: 1px solid #000; width: 75%;">Item</th>';
+    result += '<th style="text-align: right; padding: 4px 6px; font-weight: bold; font-size: 12px; width: 25%;">Qty</th>';
     result += '</tr>';
     result += '</thead>';
     result += '<tbody>';
 
-    items.forEach(item => {
+    items.forEach((item, index) => {
         const name = escapeHtml(item.name || 'Unknown');
         const quantity = formatQuantity(item.quantity || 0);
 
-        result += '<tr>';
-        result += `<td style="text-align: left; padding: 2px 8px; font-weight: 700; font-size: 11px;">${name}</td>`;
-        result += `<td style="text-align: right; padding: 2px 8px; font-weight: 700; font-size: 11px;">${quantity}</td>`;
+        const rowStyle = index === items.length - 1 ? '' : 'border-bottom: 1px solid #000;';
+
+        result += `<tr style="${rowStyle}">`;
+        result += `<td style="text-align: left; padding: 4px 6px; font-weight: bold; font-size: 11px; border-right: 1px solid #000;">${name}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold; font-size: 11px;">${quantity}</td>`;
         result += '</tr>';
     });
 
@@ -1076,7 +1091,7 @@ const I18N_UR = {
     'Save': 'محفوظ کریں',
 
     // Receipts
-    'Khyber Charsi Tikka Karahi & Restaurant': 'خیبر چرسی تکہ کڑاہی اینڈ ریسٹورنٹ',
+    'ABC Restaurant': 'اے بی سی ریسٹورنٹ',
     'Order ID: ': 'آرڈر نمبر: ',
     'Order No.: ': 'آرڈر نمبر: ',
     'Date: ': 'تاریخ: ',
@@ -1957,12 +1972,20 @@ window.loadMenuItemsList = function loadMenuItemsList() {
             <td class="image-cell" style="text-align: center; padding: 8px;">
                 ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 60px; max-height: 60px; border-radius: 4px; border: 1px solid #e0e0e0; object-fit: cover;">` : '<span style="color: #999; font-size: 12px;">No image</span>'}
             </td>
-            <td class="actions-cell">
-                <button class="btn-edit" onclick="editMenuItemInline(${item.id})">Edit</button>
-                <button class="btn-delete" onclick="deleteMenuItem(${item.id}, this)">Delete</button>
+            <td class="actions-cell" style="display: flex; gap: 8px; align-items: center; justify-content: flex-start; height: 100%;">
+                <button class="btn-edit" onclick="editMenuItemInline(${item.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                </button>
+                <button class="btn-delete" onclick="deleteMenuItem(${item.id}, this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
                 ${isFavorite ?
-                `<button class="btn-favorite btn-favorite-remove" onclick="removeFromFavorites(${item.id})" style="background: #757575; margin-left: 5px; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">Remove from Favourites</button>` :
-                `<button class="btn-favorite btn-favorite-add" onclick="addToFavorites(${item.id})" style="background: #4caf50; margin-left: 5px; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">Move to Favourites</button>`
+                `<button class="btn-favorite btn-favorite-remove" onclick="removeFromFavorites(${item.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Remove from Favourites">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#eab308" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>` :
+                `<button class="btn-favorite btn-favorite-add" onclick="addToFavorites(${item.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Move to Favourites">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </button>`
             }
             </td>
         `;
@@ -2636,9 +2659,15 @@ window.loadSales = function loadSales() {
             <td>${waiterName}</td>
             <td>Rs.${formatNumber(order.total || 0)}</td>
             <td>
-                <button class="btn-view" onclick="viewSale('${orderIdentifier}')" style="background: #4a90e2; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">View Sale</button>
-                <button class="btn-view" onclick="printReceiptForSale('${orderIdentifier}')" style="background: #4caf50; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">Print</button>
-                <button class="btn-delete" onclick="deleteSale('${orderIdentifier}', this)" style="font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">Delete</button>
+                <button class="btn-view" onclick="viewSale('${orderIdentifier}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="View Sale">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+                <button class="btn-view" onclick="printReceiptForSale('${orderIdentifier}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Print Receipt">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                </button>
+                <button class="btn-delete" onclick="deleteSale('${orderIdentifier}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -2970,7 +2999,9 @@ window.loadTaxHistory = function loadTaxHistory() {
             <td>Rs.${formatNumber(taxAmount)}</td>
             <td>Rs.${formatNumber(total)}</td>
             <td>
-                <button class="btn-view" onclick="printReceiptForSale('${sale.orderId || sale.id}')" style="background: #4caf50; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.1px;">Print</button>
+                <button class="btn-view" onclick="printReceiptForSale('${sale.orderId || sale.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Print Receipt">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -3263,9 +3294,9 @@ window.printTaxHistory = () => {
             <body>
 
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="report-title">TAX HISTORY REPORT</div>
                     <div class="separator"></div>
@@ -3695,9 +3726,9 @@ window.printReceiptForSale = (orderId) => {
     const displayOrderNumber = (order.orderNumber || extractOrderNumber(order.orderId || order.id) || '').toString().padStart(7, '0');
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     receipt += `Customer: ${order.customerName || '-'}\n`;
@@ -3866,7 +3897,7 @@ window.printReceiptForSale = (orderId) => {
                                     processedLines.push(line);
                                 } else {
                                     // Regular text line
-                                    if (line.trim() === 'Khyber Charsi Tikka Karahi & Restaurant' || line.includes('Khyber Charsi Tikka Karahi & Restaurant')) {
+                                    if (line.trim() === 'ABC Restaurant' || line.includes('ABC Restaurant')) {
                                         processedLines.push('<span class="restaurant-heading">' + line + '</span>');
                                     } else if (line.includes('Order No.:') || line.includes('Order No.') || line.includes('Order ID:') || line.includes('Order ID') || line.includes('Order:')) {
                                         processedLines.push('<span class="order-id-line">' + line + '</span>');
@@ -4094,21 +4125,31 @@ window.loadEmployees = function loadEmployees() {
                             padding: 6px 10px;
                             border-radius: 4px;
                             cursor: ${payouts.length === 0 ? 'not-allowed' : 'pointer'};
-                            font-size: 14px;
+                            font-size: 16px;
                             color: white;
-                            font-weight: 600;
                             height: 32px;
+                            width: 32px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             opacity: ${payouts.length === 0 ? '0.65' : '1'};
                         "
-                        title="View Payouts"
-                    >📋 Payouts (${payouts.length})</button>
-                    <button onclick="openAttendanceModal(${employee.id})" style="background: #673ab7; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; color: white; font-weight: 600; height: 32px; display: flex; align-items: center; justify-content: center; gap: 6px;" title="Attendance"><span>🕒</span><span>Attendance</span></button>
-                    <button onclick="openAddPayoutModal(${employee.id})" style="background: #ffc107; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; height: 32px; width: 32px; display: flex; align-items: center; justify-content: center;" title="Add Payout">💰</button>
-                    <button onclick="editEmployee(${employee.id})" style="background: #ffc107; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; height: 32px; width: 32px; display: flex; align-items: center; justify-content: center;" title="Edit">✏️</button>
-                    <button onclick="deleteEmployee(${employee.id}, this)" style="background: #757575; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; color: white; height: 32px; width: 32px; display: flex; align-items: center; justify-content: center;" title="Delete">🗑️</button>
+                        title="View Payouts (${payouts.length})"
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </button>
+                    <button onclick="openAttendanceModal(${employee.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Attendance">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </button>
+                    <button onclick="openAddPayoutModal(${employee.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Add Payout">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </button>
+                    <button onclick="editEmployee(${employee.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                    </button>
+                    <button onclick="deleteEmployee(${employee.id}, this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
                 </div>
             </td>
         `;
@@ -4800,8 +4841,12 @@ window.loadWaiters = function loadWaiters() {
             <td style="padding: 12px; font-weight: 600; color: #333;">${escapeHtml(waiter.name || 'N/A')}</td>
             <td style="padding: 12px; text-align: center; font-weight: 600; color: #4a90e2;">${orderCount}</td>
             <td style="padding: 12px; text-align: center;">
-                <button onclick="editWaiter(${waiter.id})" style="background: #4a90e2; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; margin-right: 5px;">Edit</button>
-                <button onclick="deleteWaiter(${waiter.id}, this)" style="background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Delete</button>
+                <button onclick="editWaiter(${waiter.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                </button>
+                <button onclick="deleteWaiter(${waiter.id}, this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -5325,9 +5370,9 @@ window.printEmployees = () => {
             <body>
 
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="separator"></div>
                     <div class="report-title">${reportLabel}</div>
@@ -5707,9 +5752,9 @@ window.printSales = () => {
             </head>
             <body>
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="report-title">SALES REPORT</div>
                     <div class="report-info">Date: ${currentDate}</div>
@@ -6122,9 +6167,9 @@ window.printItemsSales = () => {
             <body>
 
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="report-title">ITEMS SALES REPORT</div>
                     <div class="separator"></div>
@@ -6451,9 +6496,9 @@ window.printExpenses = () => {
             <body>
 
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="report-title">EXPENSES REPORT</div>
                     <div class="separator"></div>
@@ -6585,8 +6630,12 @@ function loadExpenseCategories() {
         categoryRow.innerHTML = `
             <span style="font-weight: 600; color: #333; text-transform: capitalize; flex: 1;">${category}</span>
             <div style="display: flex; gap: 8px;">
-                <button onclick="editExpenseCategory('${category}')" style="background: #4a90e2; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-family: 'Poppins', 'Inter', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.1px;">Edit</button>
-                <button onclick="deleteExpenseCategory('${category}', this)" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-family: 'Poppins', 'Inter', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.1px;">Delete</button>
+                <button onclick="editExpenseCategory('${category}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                </button>
+                <button onclick="deleteExpenseCategory('${category}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
             </div>
         `;
         container.appendChild(categoryRow);
@@ -6896,8 +6945,12 @@ window.loadExpenses = function loadExpenses() {
             </td>
             <td>${dateTimeStr}</td>
             <td>
-                <button class="btn-edit" onclick="editExpense(${expense.id})">Edit</button>
-                <button class="btn-delete" onclick="deleteExpense(${expense.id}, this)">Delete</button>
+                <button class="btn-edit" onclick="editExpense(${expense.id})" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                </button>
+                <button class="btn-delete" onclick="deleteExpense(${expense.id}, this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -7088,8 +7141,12 @@ window.loadStock = function loadStock() {
                 </span>
             </td>
             <td style="padding: 12px; text-align: center;">
-                <button onclick="editStock('${stock.id}')" style="background: #4a90e2; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; margin-right: 5px;">Edit</button>
-                <button onclick="deleteStock('${stock.id}', this)" style="background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Delete</button>
+                <button onclick="editStock('${stock.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                </button>
+                <button onclick="deleteStock('${stock.id}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -7914,14 +7971,20 @@ function loadTables() {
             <td style="padding: 6px 12px; text-align: center;">
                 <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
                     ${status === 'booked' ? 
-                        `<button class="unbook-btn-list" data-table-id="${table.id}" style="background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; outline: none; transition: background 0.2s;">Unbook</button>` :
-                        `<button onclick="event.stopPropagation(); openBookTableModal('${table.id}')" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; outline: none; transition: background 0.2s;">Book Now</button>`
+                        `<button class="unbook-btn-list" data-table-id="${table.id}" style="background: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; outline: none; transition: background 0.2s;">Unbook</button>` :
+                        `<button onclick="event.stopPropagation(); openBookTableModal('${table.id}')" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; outline: none; transition: background 0.2s;">Book Now</button>`
                     }
                     ${status === 'booked' ?
-                        `<button onclick="event.stopPropagation(); editTableBooking('${table.id}')" style="background: #eab308; color: white; border: none; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 12px; outline: none;" title="Edit Booking">✏️</button>` : ''
+                        `<button onclick="event.stopPropagation(); editTableBooking('${table.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit Booking">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                        </button>` : ''
                     }
-                    <button onclick="event.stopPropagation(); editTable('${table.id}')" style="background: #9ca3af; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; outline: none; transition: background 0.2s;">Edit</button>
-                    <button onclick="event.stopPropagation(); deleteTable('${table.id}', this)" style="background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; outline: none; transition: background 0.2s;">Delete</button>
+                    <button onclick="event.stopPropagation(); editTable('${table.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit Table">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                    </button>
+                    <button onclick="event.stopPropagation(); deleteTable('${table.id}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete Table">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
                 </div>
             </td>
         `;
@@ -8902,9 +8965,9 @@ window.printDashboard = () => {
             <body>
 
                 <div class="header-section">
-                    <div class="restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div class="restaurant-name">ABC Restaurant</div>
                     <div class="report-info">Contact: 0319-9922922</div>
-                    <div class="report-info">Main Bazar, Nathia Gali</div>
+                    <div class="report-info">Wah Model Town, Wah Cantt</div>
                     <div class="separator"></div>
                     <div class="report-title">DASHBOARD REPORT</div>
                     <div class="separator"></div>
@@ -11257,9 +11320,9 @@ function holdOrder() {
     Storage.set('holdOrders', holdOrders);
 
     // Build Customer Receipt + KOT from the held order (so it prints even after cart clears)
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
 
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
@@ -11287,7 +11350,7 @@ function holdOrder() {
     const receiveTime = calculateReceiveTime(heldOrder.time, heldOrder.date);
     const kotHTML = `
         <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
 
             <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
             <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
@@ -11508,11 +11571,19 @@ function loadHoldOrders() {
             <td>${customerName}</td>
             <td>${waiterName}</td>
             <td>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-width: 200px;">
-                    <button class="btn-edit" onclick="editHoldOrder('${order.id}')" style="font-family: 'Poppins', 'Inter', sans-serif; letter-spacing: 0.1px;">Edit</button>
-                    <button id="completeBtn_${order.id}" class="btn-edit" onclick="showCompleteConfirmation('${order.id}', this)" style="background: #4caf50; font-family: 'Poppins', 'Inter', sans-serif; letter-spacing: 0.1px;">Complete</button>
-                    <button class="btn-edit" onclick="printReceiptForOrder('${order.id}')" style="background: #ff9800; font-family: 'Poppins', 'Inter', sans-serif; letter-spacing: 0.1px;">Print</button>
-                    <button class="btn-delete" onclick="deleteHoldOrder('${order.id}', this)" style="font-family: 'Poppins', 'Inter', sans-serif; letter-spacing: 0.1px;">Delete</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-edit" onclick="editHoldOrder('${order.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Edit Order">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path></svg>
+                    </button>
+                    <button id="completeBtn_${order.id}" class="btn-edit" onclick="showCompleteConfirmation('${order.id}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Complete Order">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="btn-edit" onclick="printReceiptForOrder('${order.id}')" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Print Receipt">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    </button>
+                    <button class="btn-delete" onclick="deleteHoldOrder('${order.id}', this)" style="background: transparent; border: none; padding: 4px; cursor: pointer; display: inline-flex; align-items: center;" title="Delete Order">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
                 </div>
             </td>
         `;
@@ -11665,9 +11736,9 @@ function printReceiptForOrder(orderId) {
     const displayOrderNumber = (order.orderNumber || extractOrderNumber(order.orderId || order.id) || '').toString().padStart(7, '0');
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     receipt += `Customer: ${order.customerName || '-'}\n`;
@@ -11816,7 +11887,7 @@ function printReceiptForOrder(orderId) {
                                     processedLines.push(line);
                                 } else {
                                     // Regular text line
-                                    if (line.trim() === 'Khyber Charsi Tikka Karahi & Restaurant' || line.includes('Khyber Charsi Tikka Karahi & Restaurant')) {
+                                    if (line.trim() === 'ABC Restaurant' || line.includes('ABC Restaurant')) {
                                         processedLines.push('<span class="restaurant-heading">' + line + '</span>');
                                     } else if (line.includes('Order No.:') || line.includes('Order No.') || line.includes('Order ID:') || line.includes('Order ID') || line.includes('Order:')) {
                                         processedLines.push('<span class="order-id-line">' + line + '</span>');
@@ -12227,7 +12298,7 @@ function saveHoldOrderChanges() {
             const singleItemTable = formatKOTItems([item]);
             const kotHTML = `
                 <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
                     <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
                     <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
                     <div style="font-size: 12px; font-weight: 700; margin-bottom: 2px;">Customer: ${customerName ? escapeHtml(customerName) : '-'}</div>
@@ -12443,9 +12514,9 @@ function printReceipt() {
     const displayOrderNumber = orderNumber.toString().padStart(7, '0');
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     if (selectedTableNo) {
@@ -12468,7 +12539,7 @@ function printReceipt() {
     const receiveTime2 = calculateReceiveTime(formatTime(now), now);
     const kotHTML2 = `
         <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
 
             <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
             <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
@@ -12586,7 +12657,7 @@ function printReceipt() {
                                 const lines = text.split('\\n');
                                 
                                 // Make restaurant heading bigger
-                                const restaurantIndex = lines.findIndex(line => line.trim() === 'Khyber Charsi Tikka Karahi & Restaurant' || line.includes('Khyber Charsi Tikka Karahi & Restaurant'));
+                                const restaurantIndex = lines.findIndex(line => line.trim() === 'ABC Restaurant' || line.includes('ABC Restaurant'));
                                 if (restaurantIndex !== -1) {
                                     lines[restaurantIndex] = '<span class="restaurant-heading">' + lines[restaurantIndex] + '</span>';
                                 }
@@ -12752,9 +12823,9 @@ function saveOrderAndGenerateContent() {
     const customerName = getCustomerName();
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     receipt += `Customer: ${customerName || '-'}\n`;
@@ -12782,7 +12853,7 @@ function saveOrderAndGenerateContent() {
     const receiveTime3 = calculateReceiveTime(formatTime(now), now);
     const kotHTML3 = `
         <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
 
             <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
             <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
@@ -12976,7 +13047,7 @@ function printOrderWindow(receipt, displayOrderNumber) {
                                 const lines = text.split('\\n');
                                 
                                 // Make restaurant heading bigger
-                                const restaurantIndex = lines.findIndex(line => line.trim() === 'Khyber Charsi Tikka Karahi & Restaurant' || line.includes('Khyber Charsi Tikka Karahi & Restaurant'));
+                                const restaurantIndex = lines.findIndex(line => line.trim() === 'ABC Restaurant' || line.includes('ABC Restaurant'));
                                 if (restaurantIndex !== -1) {
                                     lines[restaurantIndex] = '<span class="restaurant-heading">' + lines[restaurantIndex] + '</span>';
                                 }
@@ -13078,9 +13149,9 @@ function holdOrderAndGenerateContent() {
     const customerName = getCustomerName();
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     receipt += `Customer: ${customerName || '-'}\n`;
@@ -13108,7 +13179,7 @@ function holdOrderAndGenerateContent() {
     const receiveTime4 = calculateReceiveTime(heldOrder.time, heldOrder.date);
     const kotHTML4 = `
         <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+            <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
 
             <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
             <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
@@ -13207,7 +13278,7 @@ window.printSeparateKOTs = function () {
             const singleItemTable = formatKOTItems([item]);
             const kotHTML = `
                 <div style="text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 100%; line-height: 1.2;">
-                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">Khyber Charsi Tikka Karahi & Restaurant</div>
+                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 2px;">ABC Restaurant</div>
                     <div style="font-size: 16px; font-weight: 900; margin: 3px 0;">====== KOT ======</div>
                     <div style="font-size: 14px; margin-bottom: 2px;"><strong>${t('Order No.')} ${displayOrderNumber}</strong></div>
                     <div style="font-size: 12px; font-weight: 700; margin-bottom: 2px;">Customer: ${customerName ? escapeHtml(customerName) : '-'}</div>
@@ -13327,9 +13398,9 @@ window.processCashOrder = function () {
     const customerName = getCustomerName();
 
     // Create receipt content
-    let receipt = `Khyber Charsi Tikka Karahi & Restaurant\n`;
+    let receipt = `ABC Restaurant\n`;
     receipt += `Contact: 0319-9922922\n`;
-    receipt += `Main Bazar, Nathia Gali\n`;
+    receipt += `Wah Model Town, Wah Cantt\n`;
     receipt += `======================\n`;
     receipt += `${t('Order No.')} ${displayOrderNumber}\n`;
     receipt += `Customer: ${customerName || '-'}\n`;
@@ -14893,9 +14964,9 @@ function generateReportHTML(title, filterText, startDate, endDate, transactionLi
         </head>
         <body>
             <div class="header text-center">
-                <h1>Khyber Charsi Tikka Karahi & Restaurant</h1>
+                <h1>ABC Restaurant</h1>
                 <p>Contact: 0319-9922922</p>
-                <p>Main Bazar, Nathia Gali</p>
+                <p>Wah Model Town, Wah Cantt</p>
             </div>
             
             <div class="divider"></div>
@@ -15319,7 +15390,7 @@ window.printStockReport = () => {
         </head>
         <body>
             <div class="header">
-                <h1>Khyber Charsi Tikka Karahi & Restaurant</h1>
+                <h1>ABC Restaurant</h1>
                 <p>Stock Report</p>
                 <p>${dateStr} ${timeStr}</p>
             </div>

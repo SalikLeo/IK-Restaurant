@@ -1,6 +1,10 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 
+// Maintain data persistence by hardcoding the userData folder to the original name
+const userDataPath = path.join(app.getPath('appData'), 'khyber-charsi-tikka-karahi-restaurant');
+app.setPath('userData', userDataPath);
+
 let mainWindow;
 
 function createWindow() {

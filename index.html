@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khyber Charsi Tikka Karahi & Restaurant Point of Sale Software developed by PrimeSoft Agency (0309-5369472)</title>
+    <title>ABC Restaurant Point of Sale Software developed by PrimeSoft Agency (0309-5369472)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
@@ -30,8 +31,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="logo-restaurant-name">Khyber Charsi Tikka Karahi & Restaurant</div>
-                <div class="logo-tagline-text">Main Bazar, Nathia Gali</div>
+                <div class="logo-restaurant-name">ABC Restaurant</div>
+                <div class="logo-tagline-text">Wah Model Town, Wah Cantt</div>
             </div>
             <nav class="sidebar-nav">
                 <button class="nav-item active" data-tab="pos">
@@ -477,7 +478,7 @@
                         <span class="menu-title">Menu</span>
                     </div>
                     <div class="top-bar-center">
-                        <h1 class="restaurant-heading">Khyber Charsi Tikka Karahi & Restaurant</h1>
+                        <h1 class="restaurant-heading">ABC Restaurant</h1>
                     </div>
                     <div class="top-bar-right">
                         <div class="search-container">
@@ -726,26 +727,26 @@
                         </div>
                     </div>
                     <div id="salesHistorySection">
-                        <div class="summary-section">
-                            <div class="summary-card">
-                                <h4>Sales</h4>
-                                <p id="todaySales">Rs 0</p>
+                        <div class="summary-section grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+                            <div class="summary-card !p-2 !border-t-2">
+                                <h4 class="!text-[11px] !mb-1 !tracking-normal">Sales</h4>
+                                <p id="todaySales" class="!text-xl font-bold">Rs 0</p>
                             </div>
-                            <div class="summary-card">
-                                <h4>Total Orders</h4>
-                                <p id="totalOrders">0</p>
+                            <div class="summary-card !p-2 !border-t-2">
+                                <h4 class="!text-[11px] !mb-1 !tracking-normal">Total Orders</h4>
+                                <p id="totalOrders" class="!text-xl font-bold">0</p>
                             </div>
-                            <div class="summary-card">
-                                <h4>This Week's Sales</h4>
-                                <p id="weekSales">Rs 0</p>
+                            <div class="summary-card !p-2 !border-t-2">
+                                <h4 class="!text-[11px] !mb-1 !tracking-normal">This Week's Sales</h4>
+                                <p id="weekSales" class="!text-xl font-bold">Rs 0</p>
                             </div>
-                            <div class="summary-card">
-                                <h4>This Month's Sales</h4>
-                                <p id="monthSales">Rs 0</p>
+                            <div class="summary-card !p-2 !border-t-2">
+                                <h4 class="!text-[11px] !mb-1 !tracking-normal">This Month's Sales</h4>
+                                <p id="monthSales" class="!text-xl font-bold">Rs 0</p>
                             </div>
-                            <div class="summary-card">
-                                <h4>Average Order Price</h4>
-                                <p id="averageOrderPrice">Rs 0</p>
+                            <div class="summary-card !p-2 !border-t-2">
+                                <h4 class="!text-[11px] !mb-1 !tracking-normal">Average Order Price</h4>
+                                <p id="averageOrderPrice" class="!text-xl font-bold">Rs 0</p>
                             </div>
                             <div class="summary-card" style="display: none;">
                                 <h4>Tax Today</h4>

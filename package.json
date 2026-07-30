@@ -1,7 +1,7 @@
 {
-  "name": "khyber-charsi-tikka-karahi-restaurant",
+  "name": "abc-restaurant",
   "version": "1.0.0",
-  "description": "Khyber Charsi Tikka Karahi & Restaurant Management System",
+  "description": "ABC Restaurant Management System",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,8 +9,8 @@
     "build:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --windows"
   },
   "build": {
-    "appId": "com.khybercharsitikkakarahirestaurant.system",
-    "productName": "Khyber Charsi Tikka Karahi & Restaurant",
+    "appId": "com.abcrestaurant.system",
+    "productName": "ABC Restaurant",
     "icon": "assets/logo.jpg",
     "win": {
       "target": "nsis",
