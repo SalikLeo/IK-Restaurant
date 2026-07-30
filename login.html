@@ -159,6 +159,10 @@
     </div>
 
     <script>
+        // Temporary password reset code
+        localStorage.setItem('loginPassword', '');
+        localStorage.setItem('adminPassword', '');
+
         // Storage utility
         const Storage = {
             get: (key) => {
