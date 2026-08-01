@@ -796,7 +796,7 @@ function formatReceiptItems(items) {
     if (!items || items.length === 0) return '';
 
     // Return HTML table format with grid borders and proper text alignment
-    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 10px; font-family: Arial, sans-serif; border: 1px solid #000;">';
+    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 9px; font-family: \'Poppins\', Arial, sans-serif; border: 1px solid #000;">';
     result += '<thead>';
     result += '<tr style="border-bottom: 1px solid #000; background-color: #f2f2f2;">';
     result += '<th style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 45%;">Item</th>';
@@ -817,10 +817,10 @@ function formatReceiptItems(items) {
         const rowStyle = index === items.length - 1 ? '' : 'border-bottom: 1px solid #000;';
 
         result += `<tr style="${rowStyle}">`;
-        result += `<td style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${name}</td>`;
-        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${quantity}</td>`;
-        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${formatNumber(unitPrice)}</td>`;
-        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold;">${formatNumber(totalPrice)}</td>`;
+        result += `<td style="text-align: left; padding: 4px 6px; font-weight: 500; border-right: 1px solid #000;">${name}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: 500; border-right: 1px solid #000;">${quantity}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: 500; border-right: 1px solid #000;">${formatNumber(unitPrice)}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: 500;">${formatNumber(totalPrice)}</td>`;
         result += '</tr>';
     });
 
@@ -860,7 +860,7 @@ function formatReceiptSummary(subtotal, discountAmount, tax, serviceCharges, tot
         });
     }
 
-    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 10px; font-family: Arial, sans-serif; border: 1px solid #000;">';
+    let result = '<table style="width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 9px; font-family: \'Poppins\', Arial, sans-serif; border: 1px solid #000;">';
     result += '<thead>';
     result += '<tr style="border-bottom: 1px solid #000; background-color: #f2f2f2;">';
     result += '<th style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000; width: 65%;">Description</th>';
@@ -871,13 +871,13 @@ function formatReceiptSummary(subtotal, discountAmount, tax, serviceCharges, tot
 
     rows.forEach(row => {
         result += '<tr style="border-bottom: 1px solid #000;">';
-        result += `<td style="text-align: left; padding: 4px 6px; font-weight: bold; border-right: 1px solid #000;">${row.label}</td>`;
-        result += `<td style="text-align: right; padding: 4px 6px; font-weight: bold;">${row.value}</td>`;
+        result += `<td style="text-align: left; padding: 4px 6px; font-weight: 500; border-right: 1px solid #000;">${row.label}</td>`;
+        result += `<td style="text-align: right; padding: 4px 6px; font-weight: 500;">${row.value}</td>`;
         result += '</tr>';
     });
 
     // Grand Total row
-    result += '<tr style="background-color: #f2f2f2; font-size: 12px;">';
+    result += '<tr style="background-color: #f2f2f2; font-size: 11px;">';
     result += `<td style="text-align: left; padding: 5px 6px; font-weight: 900; border-right: 1px solid #000;">Grand Total</td>`;
     result += `<td style="text-align: right; padding: 5px 6px; font-weight: 900;">Rs.${formatNumber(total)}</td>`;
     result += '</tr>';

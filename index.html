@@ -234,148 +234,101 @@
                 </div>
 
                 <!-- Summary Cards Row 1 -->
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #4a90e2;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Today's Sales</h3>
-                            <span style="font-size: 24px;">💰</span>
+                <div class="dashboard-card-grid">
+                    <div class="dashboard-card blue">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Today's Sales</h3>
+                            <span class="dashboard-card-icon">💰</span>
                         </div>
-                        <p id="dashboardTodaySales"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardTodaySales" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #e74c3c;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Today's Expenses</h3>
-                            <span style="font-size: 24px;">💸</span>
+                    <div class="dashboard-card red">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Today's Expenses</h3>
+                            <span class="dashboard-card-icon">💸</span>
                         </div>
-                        <p id="dashboardTodayExpenses"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardTodayExpenses" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #27ae60;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Today's Profit</h3>
-                            <span style="font-size: 24px;">📈</span>
+                    <div class="dashboard-card green">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Today's Profit</h3>
+                            <span class="dashboard-card-icon">📈</span>
                         </div>
-                        <p id="dashboardTodayProfit"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardTodayProfit" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #f39c12;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Hold Orders</h3>
-                            <span style="font-size: 24px;">⏸️</span>
+                    <div class="dashboard-card yellow">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Hold Orders</h3>
+                            <span class="dashboard-card-icon">⏸️</span>
                         </div>
-                        <p id="dashboardHoldOrders"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">0</p>
+                        <p id="dashboardHoldOrders" class="dashboard-card-value">0</p>
                     </div>
                 </div>
 
                 <!-- Summary Cards Row 2 -->
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #e74c3c;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Today's Discounts</h3>
-                            <span style="font-size: 24px;">🏷️</span>
+                <div class="dashboard-card-grid">
+                    <div class="dashboard-card red">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Today's Discounts</h3>
+                            <span class="dashboard-card-icon">🏷️</span>
                         </div>
-                        <p id="dashboardTodayDiscounts"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardTodayDiscounts" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #f39c12;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Weekly Discounts</h3>
-                            <span style="font-size: 24px;">🏷️</span>
+                    <div class="dashboard-card yellow">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Weekly Discounts</h3>
+                            <span class="dashboard-card-icon">🏷️</span>
                         </div>
-                        <p id="dashboardWeeklyDiscounts"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardWeeklyDiscounts" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #3498db;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Today's Taxes</h3>
-                            <span style="font-size: 24px;">💰</span>
+                    <div class="dashboard-card lightblue">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Today's Taxes</h3>
+                            <span class="dashboard-card-icon">💰</span>
                         </div>
-                        <p id="dashboardTodayTaxes"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardTodayTaxes" class="dashboard-card-value">Rs. 0</p>
                     </div>
 
-                    <div
-                        style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 3px solid #16a085;">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <h3
-                                style="margin: 0; font-size: 14px; color: #666; font-weight: 600; text-transform: uppercase;">
-                                Weekly Taxes</h3>
-                            <span style="font-size: 24px;">💰</span>
+                    <div class="dashboard-card teal">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Weekly Taxes</h3>
+                            <span class="dashboard-card-icon">💰</span>
                         </div>
-                        <p id="dashboardWeeklyTaxes"
-                            style="margin: 0; font-size: 32px; font-weight: 700; color: #1e3a5f;">Rs. 0</p>
+                        <p id="dashboardWeeklyTaxes" class="dashboard-card-value">Rs. 0</p>
                     </div>
                 </div>
 
                 <!-- Monthly Overview -->
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                    <div
-                        style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #1e3a5f; font-weight: 700;">This Week
-                        </h3>
+                <div class="dashboard-overview-grid">
+                    <div class="dashboard-overview-card">
+                        <h3 class="dashboard-overview-card-title">This Week</h3>
                         <div style="margin-bottom: 10px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #666; font-size: 14px;">Sales:</span>
-                                <span id="dashboardWeekSales" style="font-weight: 600; color: #1e3a5f;">Rs. 0</span>
+                            <div class="dashboard-overview-item">
+                                <span class="dashboard-overview-label">Sales:</span>
+                                <span id="dashboardWeekSales" class="dashboard-overview-value">Rs. 0</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: #666; font-size: 14px;">Expenses:</span>
-                                <span id="dashboardWeekExpenses" style="font-weight: 600; color: #1e3a5f;">Rs. 0</span>
+                            <div class="dashboard-overview-item">
+                                <span class="dashboard-overview-label">Expenses:</span>
+                                <span id="dashboardWeekExpenses" class="dashboard-overview-value">Rs. 0</span>
                             </div>
                         </div>
                     </div>
 
-                    <div
-                        style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #1e3a5f; font-weight: 700;">This Month
-                        </h3>
+                    <div class="dashboard-overview-card">
+                        <h3 class="dashboard-overview-card-title">This Month</h3>
                         <div style="margin-bottom: 10px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #666; font-size: 14px;">Sales:</span>
-                                <span id="dashboardMonthSales" style="font-weight: 600; color: #1e3a5f;">Rs. 0</span>
+                            <div class="dashboard-overview-item">
+                                <span class="dashboard-overview-label">Sales:</span>
+                                <span id="dashboardMonthSales" class="dashboard-overview-value">Rs. 0</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between;">
-                                <span style="color: #666; font-size: 14px;">Expenses:</span>
-                                <span id="dashboardMonthExpenses" style="font-weight: 600; color: #1e3a5f;">Rs. 0</span>
+                            <div class="dashboard-overview-item">
+                                <span class="dashboard-overview-label">Expenses:</span>
+                                <span id="dashboardMonthExpenses" class="dashboard-overview-value">Rs. 0</span>
                             </div>
                         </div>
                     </div>
