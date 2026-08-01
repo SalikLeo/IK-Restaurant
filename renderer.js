@@ -7716,6 +7716,42 @@ function isOrderInTableTimeFilter(orderDateStr, filterType, filterValue) {
     return false;
 }
 
+window.checkTableFiltersState = function() {
+    const timeFilter = document.getElementById('tableTimeFilterType')?.value || 'alltime';
+    const sortBy = document.getElementById('tableSortBy')?.value || 'number-asc';
+    const filter = typeof tablesFilter !== 'undefined' ? tablesFilter : 'all';
+    
+    const resetContainer = document.getElementById('tableFiltersResetContainer');
+    if (!resetContainer) return;
+    
+    if (timeFilter !== 'alltime' || sortBy !== 'number-asc' || filter !== 'all') {
+        resetContainer.style.display = 'flex';
+    } else {
+        resetContainer.style.display = 'none';
+    }
+};
+
+window.resetTableFilters = function() {
+    const timeFilterSelect = document.getElementById('tableTimeFilterType');
+    const sortBySelect = document.getElementById('tableSortBy');
+    
+    if (timeFilterSelect) {
+        timeFilterSelect.value = 'alltime';
+        window.handleTableTimeFilterTypeChange();
+    }
+    
+    if (sortBySelect) {
+        sortBySelect.value = 'number-asc';
+    }
+    
+    if (window.filterTables) {
+        window.filterTables('all');
+    } else {
+        tablesFilter = 'all';
+        loadTables();
+    }
+};
+
 window.handleTableTimeFilterTypeChange = function() {
     const filterType = document.getElementById('tableTimeFilterType').value;
     const container = document.getElementById('tableTimeValueContainer');
@@ -8068,6 +8104,7 @@ function loadTables() {
             tableListBody.appendChild(detailTr);
         }
     });
+    if (window.checkTableFiltersState) window.checkTableFiltersState();
 }
 
 window.filterTables = (filter) => {

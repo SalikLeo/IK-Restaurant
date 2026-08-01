@@ -1745,6 +1745,14 @@
                             <option value="revenue-desc">Total Revenue (Desc)</option>
                         </select>
                     </div>
+
+                    <!-- Reset Filters Button -->
+                    <div id="tableFiltersResetContainer" style="display: none; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 12px; font-weight: 600; color: transparent; user-select: none; font-family: 'Inter', sans-serif;">Reset</label>
+                        <button onclick="resetTableFilters()" title="Reset Filters" style="height: 38px; width: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; border: 1.5px solid #fca5a5; background: #fee2e2; color: #ef4444; font-size: 16px; font-weight: bold; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#fecaca'; this.style.color='#dc2626';" onmouseout="this.style.background='#fee2e2'; this.style.color='#ef4444';">
+                            ✕
+                        </button>
+                    </div>
                     
                     <!-- Print Button -->
                     <div style="display: flex; flex-direction: column; justify-content: flex-end; margin-left: auto;">
